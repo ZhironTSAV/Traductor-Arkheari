@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traductor Arkhéari</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      color: #4a148c;
+    }
+    select, textarea {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+    #output {
+      margin-top: 20px;
+      background: white;
+      min-height: 120px;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid #999;
+      font-size: 2rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: "Segoe UI Symbol", monospace, serif;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Traductor Arkhéari</h1>
+
+  <label for="alfabeto">Elegir alfabeto:</label>
+  <select id="alfabeto" aria-label="Selector de alfabeto">
+    <option value="runico">Alfabeto Rúnico Arkhéari</option>
+    <option value="cotidiano">Alfabeto Cotidiano Arkhéari</option>
+  </select>
+
+  <label for="inputText">Texto en español:</label>
+  <textarea id="inputText" rows="5" placeholder="Escribe aquí en español..."></textarea>
+
+  <label>Traducción:</label>
+  <div id="output" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    const runicoMap = {
+      a: '𐌀', b: '𐌁', c: '𐌊', d: '𐌃', e: '𐌄', f: '𐌅', g: '𐌂',
+      h: '𐌷', i: '𐌉', j: '𐌖', k: '𐌊', l: '𐌋', m: '𐌌', n: '𐌍',
+      o: '𐌏', p: '𐌐', q: '𐌒', r: '𐌓', s: '𐌔', t: '𐌕', u: '𐌖',
+      v: '𐌗', w: '𐌘', x: '𐌙', y: '𐌚', z: '𐌛',
+      ' ': ' ', '.': '.', ',': ',', '?': '?', '!': '!', '\n': '\n'
+    };
+
+    const cotidianoMap = {
+      a: '∧', b: 'Ʇ', c: '⟒', d: 'ᐁ', e: '≡', f: '†', g: 'Ꝺ',
+      h: 'ʜ', i: '|', j: 'Ʒ', k: '⟒', l: 'ʟ', m: 'ϻ', n: 'ͷ',
+      o: '○', p: '¶', q: '⍾', r: 'ʀ', s: 'Ϟ', t: '⊥', u: '∪',
+      v: '√', w: 'ɯ', x: '×', y: 'ʎ', z: 'Ƶ',
+      ' ': ' ', '.': '.', ',': ',', '?': '?', '!': '!', '\n': '\n'
+    };
+
+    const inputText = document.getElementById('inputText');
+    const output = document.getElementById('output');
+    const alfabetoSelect = document.getElementById('alfabeto');
+
+    function traducir(text, mapa) {
+      return text.toLowerCase().split('').map(c => mapa[c] || c).join('');
+    }
+
+    function actualizarTraduccion() {
+      const texto = inputText.value;
+      const mapa = alfabetoSelect.value === 'runico' ? runicoMap : cotidianoMap;
+      output.textContent = traducir(texto, mapa);
+    }
+
+    inputText.addEventListener('input', actualizarTraduccion);
+    alfabetoSelect.addEventListener('change', actualizarTraduccion);
+
+    // Traducción inicial vacía
+    actualizarTraduccion();
+  </script>
+</body>
+</html>
